@@ -1,7 +1,20 @@
+import java.util.Scanner;
+
 public class Echo {
     public static void main(String[] args) {
-        System.out.println("Hello! I'm Echo");
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Hey there! I'm Echo, your personal assistant");
         System.out.println("What can I do for you?");
-        System.out.println("Bye. Hope to see you again soon!");
+
+        while (true) {
+            String input = sc.nextLine();
+            if (input.equals("bye")) {
+                System.out.println("Bye. Hope to see you again soon!");
+                break;
+            }
+            System.out.println(input);
+        }
+        sc.close();
     }
 }
