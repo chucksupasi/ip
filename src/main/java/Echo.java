@@ -36,7 +36,19 @@ public class Echo {
 
             // Mark a task as done
             else if (input.startsWith("mark ")) {
-                int num = Integer.parseInt(input.substring(5)) - 1;
+                int num = -1;
+                try {
+                    String numStr = input.substring(5).trim();
+                    num = Integer.parseInt(numStr) - 1;
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Error: Task number must be a number!");
+                    continue;
+                }
+                if (num < 0 || num >= taskCount) {
+                    System.out.println("Error: That task number does not exist!");
+                    continue;
+                }
                 done[num] = true;
                 System.out.println("Nice! I've marked this task as done:");
                 printTask(num, tasks, taskType, timeInfo, done);
@@ -44,7 +56,18 @@ public class Echo {
 
             // Unmark a task
             else if (input.startsWith("unmark ")) {
-                int num = Integer.parseInt(input.substring(7)) - 1;
+                int num = -1;
+                try {
+                    String numStr = input.substring(7).trim();
+                    num = Integer.parseInt(numStr) - 1;
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: Task number must be a number!");
+                    continue;
+                }
+                if (num < 0 || num >= taskCount) {
+                    System.out.println("Error: That task number does not exist!");
+                    continue;
+                }
                 done[num] = false;
                 System.out.println("OK, I've marked this task as not done yet:");
                 printTask(num, tasks, taskType, timeInfo, done);
@@ -52,16 +75,17 @@ public class Echo {
 
             // Create a todo
             else if (input.startsWith("todo ")) {
-                String desc = input.substring(5);
-
+                String desc = input.substring(5).trim();
+                if (desc.isEmpty()) {
+                    System.out.println("Error: The description of a todo cannot be empty.");
+                    continue;
+                }
                 tasks[taskCount] = desc;
                 taskType[taskCount] = "T";
                 timeInfo[taskCount] = "";
                 done[taskCount] = false;
-
                 System.out.println("Got it. I've added this task:");
                 printTask(taskCount, tasks, taskType, timeInfo, done);
-
                 taskCount++;
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
@@ -69,18 +93,18 @@ public class Echo {
             // Create a deadline
             else if (input.startsWith("deadline ")) {
                 String[] parts = input.substring(9).split(" /by ");
-
-                String desc = parts[0];
-                String by = parts[1];
-
+                if (parts.length < 2) {
+                    System.out.println("Error: Deadline must have a description and /by date.");
+                    continue;
+                }
+                String desc = parts[0].trim();
+                String by = parts[1].trim();
                 tasks[taskCount] = desc;
                 taskType[taskCount] = "D";
                 timeInfo[taskCount] = "by: " + by;
                 done[taskCount] = false;
-
                 System.out.println("Got it. I've added this task:");
                 printTask(taskCount, tasks, taskType, timeInfo, done);
-
                 taskCount++;
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
@@ -88,11 +112,18 @@ public class Echo {
             // Create an event
             else if (input.startsWith("event ")) {
                 String[] firstSplit = input.substring(6).split(" /from ");
-                String desc = firstSplit[0];
-
+                if (firstSplit.length < 2) {
+                    System.out.println("Error: Event must have a description and /from time.");
+                    continue;
+                }
+                String desc = firstSplit[0].trim();
                 String[] secondSplit = firstSplit[1].split(" /to ");
-                String from = secondSplit[0];
-                String to = secondSplit[1];
+                if (secondSplit.length < 2) {
+                    System.out.println("Error: Event must have /from and /to times.");
+                    continue;
+                }
+                String from = secondSplit[0].trim();
+                String to = secondSplit[1].trim();
 
                 tasks[taskCount] = desc;
                 taskType[taskCount] = "E";
@@ -104,6 +135,9 @@ public class Echo {
 
                 taskCount++;
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
+            }
+            else {
+                System.out.println("Error: I don't understand that command.");
             }
         }
         sc.close();
