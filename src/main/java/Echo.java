@@ -136,6 +136,30 @@ public class Echo {
                 taskCount++;
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
+            else if (input.startsWith("delete ")) {
+                int num = -1;
+                try {
+                    String numStr = input.substring(7).trim();
+                    num = Integer.parseInt(numStr) - 1;
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: Task number must be a number!");
+                    continue;
+                }
+                if (num < 0 || num >= taskCount) {
+                    System.out.println("Error: That task number does not exist!");
+                    continue;
+                }
+                System.out.println("Noted. I've removed this task:");
+                printTask(num, tasks, taskType, timeInfo, done);
+                for (int i = num; i < taskCount - 1; i++) {
+                    tasks[i] = tasks[i + 1];
+                    taskType[i] = taskType[i + 1];
+                    timeInfo[i] = timeInfo[i + 1];
+                    done[i] = done[i + 1];
+                }
+                taskCount--;
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+            }
             else {
                 System.out.println("Error: I don't understand that command.");
             }
