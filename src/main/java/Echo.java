@@ -26,9 +26,9 @@ public class Echo {
                     String status = done[i] ? "[X]" : "[ ]";
                     String typeTag = "[" + taskType[i] + "]";
                     if (taskType[i].equals("T")) {
-                        System.out.println((i + 1) + ". " + typeTag + status + " " + tasks[i]);
+                        System.out.println((i + 1) + "." + typeTag + status + " " + tasks[i]);
                     } else {
-                        System.out.println((i + 1) + ". " + typeTag + status + " "
+                        System.out.println((i + 1) + "." + typeTag + status + " "
                                 + tasks[i] + " (" + timeInfo[i] + ")");
                     }
                 }
