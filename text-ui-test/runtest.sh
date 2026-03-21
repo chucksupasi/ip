@@ -61,7 +61,7 @@ echo -e "${GREEN}✓ Compilation successful${NC}\n"
 
 # run the program, feed commands from input.txt file and redirect the output to the ACTUAL.TXT
 echo -e "${BOLD}[4/4] Running tests...${NC}"
-java -classpath ../bin Duke < input.txt > ACTUAL.TXT
+java -classpath ../bin Echo < input.txt > ACTUAL.TXT
 
 # convert to UNIX format
 cp EXPECTED.TXT EXPECTED-UNIX.TXT
