@@ -1,13 +1,16 @@
 import java.util.Scanner;
 
 public class Echo {
+    enum TaskType {
+        T, D, E
+    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String[] tasks = new String[100];
         int taskCount = 0;
         boolean[] done = new boolean[100];
         String[] timeInfo = new String[100];
-        String[] taskType = new String[100];
+        TaskType[] taskType = new TaskType[100];
 
         System.out.println("Hey there! I'm Echo, your personal assistant");
         System.out.println("What can I do for you?");
@@ -25,7 +28,7 @@ public class Echo {
                 for (int i = 0; i < taskCount; i++) {
                     String status = done[i] ? "[X]" : "[ ]";
                     String typeTag = "[" + taskType[i] + "]";
-                    if (taskType[i].equals("T")) {
+                    if (taskType[i] == TaskType.T) {
                         System.out.println((i + 1) + "." + typeTag + status + " " + tasks[i]);
                     } else {
                         System.out.println((i + 1) + "." + typeTag + status + " "
@@ -81,7 +84,7 @@ public class Echo {
                     continue;
                 }
                 tasks[taskCount] = desc;
-                taskType[taskCount] = "T";
+                taskType[taskCount] = TaskType.T;
                 timeInfo[taskCount] = "";
                 done[taskCount] = false;
                 System.out.println("Got it. I've added this task:");
@@ -100,7 +103,7 @@ public class Echo {
                 String desc = parts[0].trim();
                 String by = parts[1].trim();
                 tasks[taskCount] = desc;
-                taskType[taskCount] = "D";
+                taskType[taskCount] = TaskType.D;
                 timeInfo[taskCount] = "by: " + by;
                 done[taskCount] = false;
                 System.out.println("Got it. I've added this task:");
@@ -126,7 +129,7 @@ public class Echo {
                 String to = secondSplit[1].trim();
 
                 tasks[taskCount] = desc;
-                taskType[taskCount] = "E";
+                taskType[taskCount] = TaskType.E;
                 timeInfo[taskCount] = "from: " + from + " to: " + to;
                 done[taskCount] = false;
 
@@ -168,10 +171,10 @@ public class Echo {
     }
 
     // Function to print the task
-    public static void printTask(int i, String[] tasks, String[] type, String[] time, boolean[] done) {
+    public static void printTask(int i, String[] tasks, TaskType[] type, String[] time, boolean[] done) {
         String status = done[i] ? "[X]" : "[ ]";
         String typeTag = "[" + type[i] + "]";
-        if (type[i].equals("T")) {
+        if (type[i] == TaskType.T) {
             System.out.println(typeTag + status + " " + tasks[i]);
         }
         else {
