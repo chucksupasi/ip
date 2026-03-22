@@ -2,21 +2,31 @@ package echo;
 
 import java.time.format.DateTimeFormatter;
 
-// All messages that users will see
+/**
+ * Handles all messages displayed to the user.
+ */
 public class Ui {
 
-    // Introduction message
+    /**
+     * Prints a welcome message to the user.
+     */
     public void showWelcome() {
         System.out.println("Hey there! I'm echo.Echo, your personal assistant");
         System.out.println("What can I do for you?");
     }
 
-    // Bye message
+    /**
+     * Prints a goodbye message to the user.
+     */
     public void showBye() {
         System.out.println("Bye. Hope to see you again soon!");
     }
 
-    // Function to print the task
+    /**
+     * Prints a single task with its status and time information.
+     * @param i the index of the task in the task list
+     * @param list the task list containing the task
+     */
     public void printTask(int i, TaskList list) {
         String status = list.done[i] ? "[X]" : "[ ]";
         String typeTag = "[" + list.taskType[i] + "]";
@@ -42,7 +52,10 @@ public class Ui {
         }
     }
 
-    // Print the full list of tasks
+    /**
+     * Prints all tasks in the task list.
+     * @param list the task list to display
+     */
     public void showList(TaskList list) {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < list.taskCount; i++) {

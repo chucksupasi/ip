@@ -5,12 +5,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-// Stores data on hard disk using file
+/**
+ * Handles loading and saving tasks to a file on disk.
+ */
 public class Storage {
 
     private static final String FILE_PATH = "./data/tasks.txt"; // File tasks.txt is in folder named data
 
-    // Load data from existing file at the start of programme
+    /**
+     * Loads tasks from the file into the given task list.
+     * @param list the task list to load tasks into
+     */
     public void load(TaskList list) {
         File file = new File(FILE_PATH);
 
@@ -87,7 +92,10 @@ public class Storage {
         }
     }
 
-    // Function to save task into file each time one is added
+    /**
+     * Saves tasks from the given task list into the file.
+     * @param list the task list to save to disk
+     */
     public void save(TaskList list) {
         try {
             File dir = new File("./data");

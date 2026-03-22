@@ -4,9 +4,18 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-// Analyse and decide how to reply when a command is entered
+/**
+ * Parses user input and executes commands for the chatbot.
+ */
 public class Parser {
 
+    /**
+     * Handles a user command and updates the task list accordingly.
+     * @param input the command entered by the user
+     * @param list the current task list
+     * @param ui the user interface for printing messages
+     * @param storage the storage handler for saving tasks
+     */
     public void handleCommand(String input, TaskList list, Ui ui, Storage storage) {
 
         // List all tasks
@@ -185,7 +194,12 @@ public class Parser {
         }
     }
 
-    // Convert input text into number index
+    /**
+     * Converts a string input into a task index for the task list.
+     * @param input the string containing the task number
+     * @param list the current task list
+     * @return the zero-based index of the task, or -1 if invalid
+     */
     private int parseIndex(String input, TaskList list) {
         int num;
         try {
