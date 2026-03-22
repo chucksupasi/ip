@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 // Echo chatbot
 public class Echo {
@@ -18,6 +21,7 @@ public class Echo {
         boolean[] done = new boolean[100];
         String[] timeInfo = new String[100];
         TaskType[] taskType = new TaskType[100];
+        LocalDate[] taskDates = new LocalDate[100];
 
         // Load data from existing file at the start of programme
         File file = new File(FILE_PATH);
@@ -33,8 +37,17 @@ public class Echo {
                     tasks[taskCount] = parts[2];
                     if (parts.length > 3) {
                         timeInfo[taskCount] = parts[3];
+                        // Store as a Java-recognised date
+                        try {
+                            taskDates[taskCount] = LocalDate.parse(parts[3], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        }
+                        // No date stored in case date cannot be recognised
+                        catch (DateTimeParseException e) {
+                            taskDates[taskCount] = null;
+                        }
                     } else {
                         timeInfo[taskCount] = "";
+                        taskDates[taskCount] = null;
                     }
                     taskCount++;
                 }
@@ -65,9 +78,13 @@ public class Echo {
                     String typeTag = "[" + taskType[i] + "]";
                     if (taskType[i] == TaskType.T) {
                         System.out.println((i + 1) + "." + typeTag + status + " " + tasks[i]);
-                    } else {
-                        System.out.println((i + 1) + "." + typeTag + status + " "
-                                + tasks[i] + " (" + timeInfo[i] + ")");
+                    }
+                    else {
+                        String formattedTime = timeInfo[i];
+                        if (taskDates[i] != null) {
+                            formattedTime = taskDates[i].format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+                        }
+                        System.out.println((i + 1) + "." + typeTag + status + " " + tasks[i] + " (" + formattedTime + ")");
                     }
                 }
             }
@@ -88,9 +105,9 @@ public class Echo {
                     continue;
                 }
                 done[num] = true;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("Nice! I've marked this task as done:");
-                printTask(num, tasks, taskType, timeInfo, done);
+                printTask(num, tasks, taskType, timeInfo, done, taskDates);
             }
 
             // Unmark a task
@@ -112,9 +129,9 @@ public class Echo {
                 }
                 // Implement the unmarking
                 done[num] = false;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("OK, I've marked this task as not done yet:");
-                printTask(num, tasks, taskType, timeInfo, done);
+                printTask(num, tasks, taskType, timeInfo, done, taskDates);
             }
 
             // Create a task without any deadline (to-do)
@@ -131,9 +148,9 @@ public class Echo {
                 timeInfo[taskCount] = "";
                 done[taskCount] = false;
                 System.out.println("Got it. I've added this task:");
-                printTask(taskCount, tasks, taskType, timeInfo, done);
+                printTask(taskCount, tasks, taskType, timeInfo, done, taskDates);
                 taskCount++;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -151,11 +168,22 @@ public class Echo {
                 tasks[taskCount] = desc;
                 taskType[taskCount] = TaskType.D;
                 timeInfo[taskCount] = "by: " + by;
+
+                // Store the date as Java-recognised if possible
+                try {
+                    taskDates[taskCount] = LocalDate.parse(by, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+                // Stores nothing in case date cannot be parsed, and store as plain text
+                catch (DateTimeParseException e) {
+                    taskDates[taskCount] = null;
+                    System.out.println("Warning: Could not parse date, storing as plain text.");
+                }
+
                 done[taskCount] = false;
                 System.out.println("Got it. I've added this task:");
-                printTask(taskCount, tasks, taskType, timeInfo, done);
+                printTask(taskCount, tasks, taskType, timeInfo, done, taskDates);
                 taskCount++;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -180,11 +208,22 @@ public class Echo {
                 tasks[taskCount] = desc;
                 taskType[taskCount] = TaskType.E;
                 timeInfo[taskCount] = "from: " + from + " to: " + to;
+
+                // Store the date as Java-recognised if possible
+                try {
+                    taskDates[taskCount] = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+                // Stores nothing in case date cannot be parsed, and store as plain text
+                catch (DateTimeParseException e) {
+                    taskDates[taskCount] = null;
+                    System.out.println("Warning: Could not parse date, storing as plain text.");
+                }
+
                 done[taskCount] = false;
                 System.out.println("Got it. I've added this task:");
-                printTask(taskCount, tasks, taskType, timeInfo, done);
+                printTask(taskCount, tasks, taskType, timeInfo, done, taskDates);
                 taskCount++;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -207,15 +246,16 @@ public class Echo {
                 }
                 // Implement the deletion of the task
                 System.out.println("Noted. I've removed this task:");
-                printTask(num, tasks, taskType, timeInfo, done);
+                printTask(num, tasks, taskType, timeInfo, done, taskDates);
                 for (int i = num; i < taskCount - 1; i++) {
                     tasks[i] = tasks[i + 1];
                     taskType[i] = taskType[i + 1];
                     timeInfo[i] = timeInfo[i + 1];
+                    taskDates[i] = taskDates[i + 1];
                     done[i] = done[i + 1];
                 }
                 taskCount--;
-                saveTasks(tasks, taskType, timeInfo, done, taskCount);
+                saveTasks(tasks, taskType, timeInfo, done, taskDates, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -228,19 +268,25 @@ public class Echo {
     }
 
     // Function to print the task
-    public static void printTask(int i, String[] tasks, TaskType[] type, String[] time, boolean[] done) {
+    public static void printTask(int i, String[] tasks, TaskType[] type, String[] time, boolean[] done, LocalDate[] dates) {
         String status = done[i] ? "[X]" : "[ ]";
         String typeTag = "[" + type[i] + "]";
+        String timeStr = time[i];
+        // See if date can be Java-recognised to store
+        if (dates[i] != null) {
+            timeStr = dates[i].format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+        }
+        // If it is a to-do, there is no date
         if (type[i] == TaskType.T) {
             System.out.println(typeTag + status + " " + tasks[i]);
         }
         else {
-            System.out.println(typeTag + status + " " + tasks[i] + " (" + time[i] + ")");
+            System.out.println(typeTag + status + " " + tasks[i] + " (" + timeStr + ")");
         }
     }
 
     // Function to save task into file each time one is added
-    public static void saveTasks(String[] tasks, TaskType[] type, String[] time, boolean[] done, int numOfTasks) {
+    public static void saveTasks(String[] tasks, TaskType[] type, String[] time, boolean[] done, LocalDate[] dates, int numOfTasks) {
         try {
             File dir = new File("./data");
             // Create folder called data if it doesn't exist
@@ -251,8 +297,15 @@ public class Echo {
             BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH));
             for (int i = 0; i < numOfTasks; i++) {
                 String line = type[i] + " | " + (done[i] ? "1" : "0") + " | " + tasks[i];
+                // If it is anything other a to-do, there is a date to add to the line
                 if (type[i] != TaskType.T) {
-                    line += " | " + time[i];
+                    // See if date can be Java-recognised to store
+                    if (dates[i] != null) {
+                        line += " | " + dates[i].format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    }
+                    else {
+                        line += " | " + time[i];
+                    }
                 }
                 bw.write(line);
                 bw.newLine();
