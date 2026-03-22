@@ -2,9 +2,14 @@ package echo;
 
 import java.util.Scanner;
 
-// Echo chatbot
+/**
+ * Main class for the Echo chatbot program.
+ */
 public class Echo {
-    // Main programme
+    /**
+     * Runs the Echo chatbot program and handles user input.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -21,6 +26,7 @@ public class Echo {
 
         // Main loop where users can chat continuously
         while (true) {
+            System.out.print("> ");
             String input = sc.nextLine();
 
             if (input.equals("bye")) {

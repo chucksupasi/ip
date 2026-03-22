@@ -2,10 +2,14 @@ package echo;
 
 import java.time.LocalDate;
 
-// Manages all data using different data structures
+/**
+ * Stores all tasks and their details in arrays.
+ */
 public class TaskList {
 
-    // Enum for the 3 types of tasks
+    /**
+     * Represents the type of a task: To-do, Deadline, or Event.
+     */
     enum TaskType {
         T, D, E
     }
