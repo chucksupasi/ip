@@ -188,6 +188,29 @@ public class Parser {
             System.out.println("Now you have " + list.taskCount + " tasks in the list.");
         }
 
+        // Find tasks by keyword
+        else if (input.startsWith("find ")) {
+            String keyword = input.substring(5).trim();
+            if (keyword.isEmpty()) {
+                System.out.println("Error: Please provide a keyword to search for.");
+                return;
+            }
+
+            System.out.println("Here are the matching tasks in your list:");
+            int count = 0;
+            for (int i = 0; i < list.taskCount; i++) {
+                if (list.tasks[i].contains(keyword)) {
+                    count++;
+                    System.out.print(count + ".");
+                    ui.printTask(i, list);
+                }
+            }
+
+            if (count == 0) {
+                System.out.println("No matching tasks found.");
+            }
+        }
+
         // Command is not understood at all
         else {
             System.out.println("Error: I don't understand that command.");
