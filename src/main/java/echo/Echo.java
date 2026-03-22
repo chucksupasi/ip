@@ -2,7 +2,7 @@ package echo;
 
 import java.util.Scanner;
 
-// echo.Echo chatbot
+// Echo chatbot
 public class Echo {
     // Main programme
     public static void main(String[] args) {
