@@ -88,6 +88,7 @@ public class Echo {
                     continue;
                 }
                 done[num] = true;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("Nice! I've marked this task as done:");
                 printTask(num, tasks, taskType, timeInfo, done);
             }
@@ -111,6 +112,7 @@ public class Echo {
                 }
                 // Implement the unmarking
                 done[num] = false;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("OK, I've marked this task as not done yet:");
                 printTask(num, tasks, taskType, timeInfo, done);
             }
@@ -131,6 +133,7 @@ public class Echo {
                 System.out.println("Got it. I've added this task:");
                 printTask(taskCount, tasks, taskType, timeInfo, done);
                 taskCount++;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -152,6 +155,7 @@ public class Echo {
                 System.out.println("Got it. I've added this task:");
                 printTask(taskCount, tasks, taskType, timeInfo, done);
                 taskCount++;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -172,7 +176,7 @@ public class Echo {
                 }
                 String from = secondSplit[0].trim();
                 String to = secondSplit[1].trim();
-                // Implement the
+                // Implement the creation of an event and store the data
                 tasks[taskCount] = desc;
                 taskType[taskCount] = TaskType.E;
                 timeInfo[taskCount] = "from: " + from + " to: " + to;
@@ -180,6 +184,7 @@ public class Echo {
                 System.out.println("Got it. I've added this task:");
                 printTask(taskCount, tasks, taskType, timeInfo, done);
                 taskCount++;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -210,6 +215,7 @@ public class Echo {
                     done[i] = done[i + 1];
                 }
                 taskCount--;
+                saveTasks(tasks, taskType, timeInfo, done, taskCount);
                 System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
@@ -230,6 +236,32 @@ public class Echo {
         }
         else {
             System.out.println(typeTag + status + " " + tasks[i] + " (" + time[i] + ")");
+        }
+    }
+
+    // Function to save task into file each time one is added
+    public static void saveTasks(String[] tasks, TaskType[] type, String[] time, boolean[] done, int numOfTasks) {
+        try {
+            File dir = new File("./data");
+            // Create folder called data if it doesn't exist
+            if (!dir.exists()) {
+                dir.mkdir(); // ADDED: create folder if missing
+            }
+            // Create a file
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH));
+            for (int i = 0; i < numOfTasks; i++) {
+                String line = type[i] + " | " + (done[i] ? "1" : "0") + " | " + tasks[i];
+                if (type[i] != TaskType.T) {
+                    line += " | " + time[i];
+                }
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.close();
+        }
+        // Print error message if cannot save the task
+        catch (IOException e) {
+            System.out.println("Error saving tasks.");
         }
     }
 }
