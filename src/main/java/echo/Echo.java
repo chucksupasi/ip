@@ -21,6 +21,7 @@ public class Echo {
 
         // Main loop where users can chat continuously
         while (true) {
+            System.out.print("> ");
             String input = sc.nextLine();
 
             if (input.equals("bye")) {

@@ -36,7 +36,8 @@ public class Ui {
         // If it is a to-do, there is no date
         if (list.taskType[i] == TaskList.TaskType.T) {
             System.out.println(typeTag + status + " " + list.tasks[i]);
-        } else {
+        }
+        else {
             System.out.println(typeTag + status + " " + list.tasks[i] + " (" + timeStr + ")");
         }
     }
