@@ -1,0 +1,9 @@
+Debugging is like being the detective in a crime movie where you are also the murderer.
+Code never lies, comments sometimes do.
+Talk is cheap. Show me the code.
+First, solve the problem. Then, write the code.
+Experience is the name everyone gives to their mistakes.
+Programs must be written for people to read, and only incidentally for machines to execute.
+Simplicity is the soul of efficiency.
+In order to be irreplaceable, one must always be different.
+Testing leads to failure, and failure leads to understanding.

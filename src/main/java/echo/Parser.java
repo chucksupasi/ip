@@ -211,6 +211,12 @@ public class Parser {
             }
         }
 
+        // Show a random motivational quote
+        else if (input.equals("cheer")) {
+            String quote = storage.getRandomCheer();
+            System.out.println(quote);
+        }
+
         // Command is not understood at all
         else {
             System.out.println("Error: I don't understand that command.");
