@@ -4,6 +4,9 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Handles loading and saving tasks to a file on disk.
@@ -11,6 +14,7 @@ import java.time.format.DateTimeParseException;
 public class Storage {
 
     private static final String FILE_PATH = "./data/tasks.txt"; // File tasks.txt is in folder named data
+    private static final String CHEER_PATH = "./data/cheer.txt"; // File cheer.txt is in folder named data
 
     /**
      * Loads tasks from the file into the given task list.
@@ -133,5 +137,37 @@ public class Storage {
         catch (IOException e) {
             System.out.println("Error saving tasks.");
         }
+    }
+
+    /**
+     * Returns a random motivational quote from the cheer file, or an error message if unavailable.
+     */
+    public String getRandomCheer() {
+        List<String> quotes = new ArrayList<>();
+
+        File file = new File(CHEER_PATH);
+
+        if (!file.exists()) {
+            return "No cheer file found.";
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    quotes.add(line);
+                }
+            }
+        }
+        catch (IOException e) {
+            return "Error reading cheer file.";
+        }
+
+        if (quotes.isEmpty()) {
+            return "No quotes available.";
+        }
+
+        Random rand = new Random();
+        return quotes.get(rand.nextInt(quotes.size()));
     }
 }
