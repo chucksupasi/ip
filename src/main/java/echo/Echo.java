@@ -1,6 +1,8 @@
+package echo;
+
 import java.util.Scanner;
 
-// Echo chatbot
+// echo.Echo chatbot
 public class Echo {
     // Main programme
     public static void main(String[] args) {

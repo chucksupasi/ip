@@ -1,3 +1,5 @@
+package echo;
+
 import java.time.LocalDate;
 
 // Manages all data using different data structures

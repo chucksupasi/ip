@@ -1,3 +1,5 @@
+package echo;
+
 import java.time.format.DateTimeFormatter;
 
 // All messages that users will see
@@ -5,7 +7,7 @@ public class Ui {
 
     // Introduction message
     public void showWelcome() {
-        System.out.println("Hey there! I'm Echo, your personal assistant");
+        System.out.println("Hey there! I'm echo.Echo, your personal assistant");
         System.out.println("What can I do for you?");
     }
 

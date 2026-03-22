@@ -1,4 +1,4 @@
-Hey there! I'm Echo, your personal assistant
+Hey there! I'm echo.Echo, your personal assistant
 What can I do for you?
 Got it. I've added this task:
 [T][ ] borrow book
