@@ -7,6 +7,9 @@ public class Echo {
     enum TaskType {
         T, D, E
     }
+
+    private static final String FILE_PATH = "./data/tasks.txt"; // File tasks.txt is in folder named data
+
     // Main programme
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -15,6 +18,32 @@ public class Echo {
         boolean[] done = new boolean[100];
         String[] timeInfo = new String[100];
         TaskType[] taskType = new TaskType[100];
+
+        // Load data from existing file at the start of programme
+        File file = new File(FILE_PATH);
+        // Check if the file is there. If not, the data starts empty.
+        if (file.exists()) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] parts = line.split(" \\| ");
+                    if (parts.length < 3) continue; // Skip corrupted lines but others are still read
+                    taskType[taskCount] = TaskType.valueOf(parts[0]);
+                    done[taskCount] = parts[1].equals("1");
+                    tasks[taskCount] = parts[2];
+                    if (parts.length > 3) {
+                        timeInfo[taskCount] = parts[3];
+                    } else {
+                        timeInfo[taskCount] = "";
+                    }
+                    taskCount++;
+                }
+            }
+            // Error message prints if tasks in file cannot be recognised
+            catch (IOException e) {
+                System.out.println("Error loading tasks.");
+            }
+        }
 
         // Introduction
         System.out.println("Hey there! I'm Echo, your personal assistant");
