@@ -14,12 +14,14 @@ public class TaskList {
         T, D, E
     }
 
-    String[] tasks = new String[100];
+    private static final int MAX_TASKS = 100;
+
+    String[] tasks = new String[MAX_TASKS];
     int taskCount = 0;
-    boolean[] done = new boolean[100];
-    String[] timeInfo = new String[100]; // Raw test for date that user inputs
-    TaskType[] taskType = new TaskType[100]; // Only T, D, E
-    LocalDate[] taskDates = new LocalDate[100]; // Deadline do-by date
-    LocalDate[] taskFromDates = new LocalDate[100]; // Event start date
-    LocalDate[] taskToDates = new LocalDate[100]; // Event end date
+    boolean[] done = new boolean[MAX_TASKS];
+    String[] timeInfo = new String[MAX_TASKS]; // Raw test for date that user inputs
+    TaskType[] taskType = new TaskType[MAX_TASKS]; // Only T, D, E
+    LocalDate[] taskDates = new LocalDate[MAX_TASKS]; // Deadline do-by date
+    LocalDate[] taskFromDates = new LocalDate[MAX_TASKS]; // Event start date
+    LocalDate[] taskToDates = new LocalDate[MAX_TASKS]; // Event end date
 }
