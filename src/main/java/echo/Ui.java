@@ -10,6 +10,8 @@ public class Ui {
     public String printingMessage = "";
     public String listingMessage = "";
 
+    private static final String DISPLAY_DATE_FORMAT = "MMM dd yyyy";
+
     /**
      * Returns the welcome message shown to the user at startup.
      * @return welcome message string
@@ -44,13 +46,13 @@ public class Ui {
 
         // If it is an event, put both start and end time
         if (list.taskType[i] == TaskList.TaskType.E) {
-            String fromStr = list.taskFromDates[i] != null ? list.taskFromDates[i].format(DateTimeFormatter.ofPattern("MMM dd yyyy")) : "unknown";
-            String toStr = list.taskToDates[i] != null ? list.taskToDates[i].format(DateTimeFormatter.ofPattern("MMM dd yyyy")) : "unknown";
+            String fromStr = list.taskFromDates[i] != null ? list.taskFromDates[i].format(DateTimeFormatter.ofPattern(DISPLAY_DATE_FORMAT)) : "unknown";
+            String toStr = list.taskToDates[i] != null ? list.taskToDates[i].format(DateTimeFormatter.ofPattern(DISPLAY_DATE_FORMAT)) : "unknown";
             timeStr = "from: " + fromStr + " to: " + toStr;
         }
         // If it is a deadline, put the do-by date
         else if (list.taskDates[i] != null) {
-            timeStr = list.taskDates[i].format(DateTimeFormatter.ofPattern("MMM dd yyyy"));
+            timeStr = list.taskDates[i].format(DateTimeFormatter.ofPattern(DISPLAY_DATE_FORMAT));
         }
 
         // If it is a to-do, there is no date
@@ -69,7 +71,7 @@ public class Ui {
      * @return formatted string of all tasks
      */
     public String showList(TaskList list) {
-        assert list.taskCount >= 0 && list.taskCount <= 100 : "Internal Error: taskCount out of bounds in showList";
+        assert list.taskCount >= 0 && list.taskCount <= TaskList.MAX_TASKS : "Internal Error: taskCount out of bounds in showList";
 
         listingMessage = "";
         listingMessage = listingMessage + "Here are the tasks in your list:\n";

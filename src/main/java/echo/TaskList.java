@@ -14,7 +14,7 @@ public class TaskList {
         T, D, E
     }
 
-    private static final int MAX_TASKS = 100;
+    public static final int MAX_TASKS = 100;
 
     String[] tasks = new String[MAX_TASKS];
     int taskCount = 0;
