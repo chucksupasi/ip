@@ -254,29 +254,100 @@ public class Parser {
         return num;
     }
 
+    /**
+     * Updates an existing task's description or date information based on the given command.
+     * @param input the update command string containing task number and new details
+     * @param list the {@link TaskList} containing the task to update
+     * @param ui the {@link Ui} handler used to format task output
+     * @param storage the {@link Storage} handler used to persist changes
+     * @return a message summarizing the update, or an error/warning message
+     */
     private String handleUpdate(String input, TaskList list, Ui ui, Storage storage) {
         StringBuilder message = new StringBuilder();
 
-        // Split into index and new description
         String[] parts = input.split(" ", 2);
-
         if (parts.length < 2) {
-            return "Error: Please provide task number and new description.\n";
+            return "Error: Please provide task number and update details.\n";
         }
 
-        // Get index
         int index = parseIndex(parts[0], list);
         if (index == -1) return printingMessage;
 
-        String newDesc = parts[1].trim();
-
-        // Validate description
-        if (newDesc.isEmpty()) {
-            return "Error: Description cannot be empty.\n";
-        }
+        String updatePart = parts[1].trim();
 
         // Update description
-        list.tasks[index] = newDesc;
+        if (!updatePart.startsWith("/")) {
+            if (updatePart.isEmpty()) {
+                return "Error: Description cannot be empty.\n";
+            }
+
+            list.tasks[index] = updatePart;
+        }
+
+        // Update do-by date for deadlines only
+        else if (updatePart.startsWith("/by ")) {
+            if (list.taskType[index] != TaskList.TaskType.D) {
+                return "Error: Only deadline tasks can use /by.\n";
+            }
+
+            String by = updatePart.substring(4).trim();
+            if (by.isEmpty()) {
+                return "Error: Deadline date cannot be empty.\n";
+            }
+
+            list.timeInfo[index] = "by: " + by;
+
+            try {
+                list.taskDates[index] = LocalDate.parse(by, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
+            }
+            catch (DateTimeParseException e) {
+                list.taskDates[index] = null;
+                message.append("Warning: Could not parse date, stored as text.\n");
+            }
+        }
+
+        // Update from and to dates for events only
+        else if (updatePart.contains("/from ") && updatePart.contains("/to ")) {
+            if (list.taskType[index] != TaskList.TaskType.E) {
+                return "Error: Only event tasks can use /from and /to.\n";
+            }
+
+            String fromSplit = updatePart.substring(6).trim();
+            String[] toSplit = fromSplit.split(" /to ");
+
+            String from = toSplit[0].trim();
+            String to = toSplit[1].trim();
+
+            System.out.println(from);
+            System.out.println(to);
+
+            if (from.isEmpty() || to.isEmpty()) {
+                return "Error: /from and /to dates cannot be empty.\n";
+            }
+
+            list.timeInfo[index] = "from: " + from + " to: " + to;
+
+            try {
+                list.taskFromDates[index] = LocalDate.parse(from, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
+            }
+            catch (DateTimeParseException e) {
+                list.taskFromDates[index] = null;
+                message.append("Warning: Could not parse /from date.\n");
+            }
+
+            try {
+                list.taskToDates[index] = LocalDate.parse(to, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
+            }
+            catch (DateTimeParseException e) {
+                list.taskToDates[index] = null;
+                message.append("Warning: Could not parse /to date.\n");
+            }
+        }
+
+        // Invalid input
+        else {
+            return "Error: Invalid update format.\n";
+        }
 
         storage.save(list);
 
@@ -285,5 +356,4 @@ public class Parser {
 
         return message.toString();
     }
-
 }
