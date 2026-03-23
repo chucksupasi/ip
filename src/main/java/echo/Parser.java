@@ -218,6 +218,10 @@ public class Parser {
             printingMessage = printingMessage + quote + "\n";
         }
 
+        else if (input.startsWith("update ")) {
+            return handleUpdate(input.substring(7), list, ui, storage);
+        }
+
         // Command is not understood at all
         else {
             printingMessage = printingMessage + "Error: I don't understand that command.\n";
@@ -249,4 +253,37 @@ public class Parser {
         assert num >= 0 && num < list.taskCount : "Internal Error: parseIndex returned invalid index";
         return num;
     }
+
+    private String handleUpdate(String input, TaskList list, Ui ui, Storage storage) {
+        StringBuilder message = new StringBuilder();
+
+        // Split into index and new description
+        String[] parts = input.split(" ", 2);
+
+        if (parts.length < 2) {
+            return "Error: Please provide task number and new description.\n";
+        }
+
+        // Get index
+        int index = parseIndex(parts[0], list);
+        if (index == -1) return printingMessage;
+
+        String newDesc = parts[1].trim();
+
+        // Validate description
+        if (newDesc.isEmpty()) {
+            return "Error: Description cannot be empty.\n";
+        }
+
+        // Update description
+        list.tasks[index] = newDesc;
+
+        storage.save(list);
+
+        message.append("Got it. I've updated this task:\n");
+        message.append(ui.printTask(index, list)).append("\n");
+
+        return message.toString();
+    }
+
 }
