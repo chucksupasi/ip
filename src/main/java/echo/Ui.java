@@ -7,19 +7,21 @@ import java.time.format.DateTimeFormatter;
  */
 public class Ui {
 
+    public String printingMessage = "";
+    public String listingMessage = "";
+
     /**
      * Prints a welcome message to the user.
      */
-    public void showWelcome() {
-        System.out.println("Hey there! I'm echo.Echo, your personal assistant");
-        System.out.println("What can I do for you?");
+    public static String showWelcome() {
+        return "Hey there! I'm Echo, your personal assistant\n" + "What can I do for you?\n";
     }
 
     /**
      * Prints a goodbye message to the user.
      */
-    public void showBye() {
-        System.out.println("Bye. Hope to see you again soon!");
+    public static String showBye() {
+        return "Bye. Hope to see you again soon!\n";
     }
 
     /**
@@ -27,7 +29,9 @@ public class Ui {
      * @param i the index of the task in the task list
      * @param list the task list containing the task
      */
-    public void printTask(int i, TaskList list) {
+    public String printTask(int i, TaskList list) {
+        printingMessage = "";
+
         String status = list.done[i] ? "[X]" : "[ ]";
         String typeTag = "[" + list.taskType[i] + "]";
         String timeStr = list.timeInfo[i];
@@ -45,22 +49,24 @@ public class Ui {
 
         // If it is a to-do, there is no date
         if (list.taskType[i] == TaskList.TaskType.T) {
-            System.out.println(typeTag + status + " " + list.tasks[i]);
+            printingMessage = printingMessage + typeTag + status + " " + list.tasks[i] + "\n";
         }
         else {
-            System.out.println(typeTag + status + " " + list.tasks[i] + " (" + timeStr + ")");
+            printingMessage = printingMessage + typeTag + status + " " + list.tasks[i] + " (" + timeStr + ")" + "\n";
         }
+        return printingMessage;
     }
 
     /**
      * Prints all tasks in the task list.
      * @param list the task list to display
      */
-    public void showList(TaskList list) {
-        System.out.println("Here are the tasks in your list:");
+    public String showList(TaskList list) {
+        listingMessage = "";
+        listingMessage = listingMessage + "Here are the tasks in your list:\n";
         for (int i = 0; i < list.taskCount; i++) {
-            System.out.print((i + 1) + ".");
-            printTask(i, list);
+            listingMessage = listingMessage + (i + 1) + "." + printTask(i, list) + "\n";
         }
+        return listingMessage;
     }
 }

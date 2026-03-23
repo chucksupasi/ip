@@ -9,6 +9,8 @@ import java.time.format.DateTimeParseException;
  */
 public class Parser {
 
+    public String printingMessage = "";
+
     /**
      * Handles a user command and updates the task list accordingly.
      * @param input the command entered by the user
@@ -16,35 +18,35 @@ public class Parser {
      * @param ui the user interface for printing messages
      * @param storage the storage handler for saving tasks
      */
-    public void handleCommand(String input, TaskList list, Ui ui, Storage storage) {
+    public String handleCommand(String input, TaskList list, Ui ui, Storage storage) {
+        // Clear printing message
+        printingMessage = "";
 
         // List all tasks
         if (input.equals("list")) {
-            ui.showList(list);
+            printingMessage = printingMessage + ui.showList(list) + "\n";
         }
 
         // Mark a task as done
         else if (input.startsWith("mark ")) {
             int num = parseIndex(input.substring(5), list);
-            if (num == -1) return;
+            if (num == -1) return printingMessage;
 
             list.done[num] = true;
             storage.save(list);
 
-            System.out.println("Nice! I've marked this task as done:");
-            ui.printTask(num, list);
+            printingMessage = printingMessage + "Nice! I've marked this task as done:\n" + ui.printTask(num, list) + "\n";
         }
 
         // Unmark a task
         else if (input.startsWith("unmark ")) {
             int num = parseIndex(input.substring(7), list);
-            if (num == -1) return;
+            if (num == -1) return printingMessage;
 
             list.done[num] = false;
             storage.save(list);
 
-            System.out.println("OK, I've marked this task as not done yet:");
-            ui.printTask(num, list);
+            printingMessage = printingMessage + "OK, I've marked this task as not done yet:\n" + ui.printTask(num, list) + "\n";
         }
 
         // create todo
@@ -53,8 +55,8 @@ public class Parser {
 
             // Error if no description
             if (desc.isEmpty()) {
-                System.out.println("Error: The description of a todo cannot be empty.");
-                return;
+                printingMessage = printingMessage + "Error: The description of a todo cannot be empty.\n";
+                return printingMessage;
             }
 
             int i = list.taskCount;
@@ -63,13 +65,10 @@ public class Parser {
             list.timeInfo[i] = "";
             list.done[i] = false;
 
-            System.out.println("Got it. I've added this task:");
-            ui.printTask(i, list);
-
             list.taskCount++;
             storage.save(list);
 
-            System.out.println("Now you have " + list.taskCount + " tasks in the list.");
+            printingMessage = printingMessage + "Got it. I've added this task:\n" + ui.printTask(i, list) + "\n" + "Now you have " + list.taskCount + " tasks in the list.\n";
         }
 
         // Create deadline
@@ -78,8 +77,8 @@ public class Parser {
 
             // No description or date
             if (parts.length < 2) {
-                System.out.println("Error: Deadline must have a description and /by date.");
-                return;
+                printingMessage = printingMessage + "Error: Deadline must have a description and /by date.\n";
+                return printingMessage;
             }
 
             int i = list.taskCount;
@@ -96,18 +95,14 @@ public class Parser {
             }
             catch (DateTimeParseException e) {
                 list.taskDates[i] = null;
-                System.out.println("Warning: Could not parse date, storing as plain text.");
+                printingMessage = printingMessage + "Warning: Could not parse date, storing as plain text.\n";
             }
 
             list.done[i] = false;
-
-            System.out.println("Got it. I've added this task:");
-            ui.printTask(i, list);
-
             list.taskCount++;
             storage.save(list);
 
-            System.out.println("Now you have " + list.taskCount + " tasks in the list.");
+            printingMessage = printingMessage + "Got it. I've added this task:\n" + ui.printTask(i, list) + "\n" + "Now you have " + list.taskCount + " tasks in the list.\n";
         }
 
         // Create event
@@ -115,16 +110,16 @@ public class Parser {
             String[] firstSplit = input.substring(6).split(" /from ");
 
             if (firstSplit.length < 2) {
-                System.out.println("Error: Event must have a description and /from time.");
-                return;
+                printingMessage = printingMessage + "Error: Event must have a description and /from time.\n";
+                return printingMessage;
             }
 
             String desc = firstSplit[0].trim();
             String[] secondSplit = firstSplit[1].split(" /to ");
 
             if (secondSplit.length < 2) {
-                System.out.println("Error: Event must have /from and /to times.");
-                return;
+                printingMessage = printingMessage + "Error: Event must have /from and /to times.\n";
+                return printingMessage;
             }
 
             int i = list.taskCount;
@@ -141,7 +136,7 @@ public class Parser {
             }
             catch (DateTimeParseException e) {
                 list.taskFromDates[i] = null;
-                System.out.println("Warning: Could not parse /from date, storing as plain text.");
+                printingMessage = printingMessage + "Warning: Could not parse /from date, storing as plain text.\n";
             }
 
             // Check if event ending date is recognisable, else store as plain text
@@ -150,27 +145,25 @@ public class Parser {
             }
             catch (DateTimeParseException e) {
                 list.taskToDates[i] = null;
-                System.out.println("Warning: Could not parse /to date, storing as plain text.");
+                printingMessage = printingMessage + "Warning: Could not parse /to date, storing as plain text.\n";
             }
 
             list.done[i] = false;
 
-            System.out.println("Got it. I've added this task:");
-            ui.printTask(i, list);
+            printingMessage = printingMessage + "Got it. I've added this task:\n" + ui.printTask(i, list) + "\n";
 
             list.taskCount++;
             storage.save(list);
 
-            System.out.println("Now you have " + list.taskCount + " tasks in the list.");
+            printingMessage = printingMessage + "Now you have " + list.taskCount + " tasks in the list.\n";
         }
 
         // Delete a task
         else if (input.startsWith("delete ")) {
             int num = parseIndex(input.substring(7), list);
-            if (num == -1) return;
+            if (num == -1) return printingMessage;
 
-            System.out.println("Noted. I've removed this task:");
-            ui.printTask(num, list);
+            printingMessage = printingMessage + "Noted. I've removed this task:\n" + ui.printTask(num, list) + "\n";
 
             for (int i = num; i < list.taskCount - 1; i++) {
                 list.tasks[i] = list.tasks[i + 1];
@@ -185,42 +178,42 @@ public class Parser {
             list.taskCount--;
             storage.save(list);
 
-            System.out.println("Now you have " + list.taskCount + " tasks in the list.");
+            printingMessage = printingMessage + "Now you have " + list.taskCount + " tasks in the list.\n";
         }
 
         // Find tasks by keyword
         else if (input.startsWith("find ")) {
             String keyword = input.substring(5).trim();
             if (keyword.isEmpty()) {
-                System.out.println("Error: Please provide a keyword to search for.");
-                return;
+                printingMessage = printingMessage + "Error: Please provide a keyword to search for.\n";
+                return printingMessage;
             }
 
-            System.out.println("Here are the matching tasks in your list:");
+            printingMessage = printingMessage + "Here are the matching tasks in your list:\n";
             int count = 0;
             for (int i = 0; i < list.taskCount; i++) {
                 if (list.tasks[i].contains(keyword)) {
                     count++;
-                    System.out.print(count + ".");
-                    ui.printTask(i, list);
+                    printingMessage = printingMessage + count + "." + ui.printTask(i, list) + "\n";
                 }
             }
 
             if (count == 0) {
-                System.out.println("No matching tasks found.");
+                printingMessage = printingMessage + "No matching tasks found.\n";
             }
         }
 
         // Show a random motivational quote
         else if (input.equals("cheer")) {
             String quote = storage.getRandomCheer();
-            System.out.println(quote);
+            printingMessage = printingMessage + quote + "\n";
         }
 
         // Command is not understood at all
         else {
-            System.out.println("Error: I don't understand that command.");
+            printingMessage = printingMessage + "Error: I don't understand that command.\n";
         }
+        return printingMessage;
     }
 
     /**
@@ -235,12 +228,12 @@ public class Parser {
             num = Integer.parseInt(input.trim()) - 1;
         }
         catch (NumberFormatException e) {
-            System.out.println("Error: Task number must be a number!");
+            printingMessage = printingMessage + "Error: Task number must be a number!\n";
             return -1;
         }
 
         if (num < 0 || num >= list.taskCount) {
-            System.out.println("Error: That task number does not exist!");
+            printingMessage = printingMessage + "Error: That task number does not exist!\n";
             return -1;
         }
 
