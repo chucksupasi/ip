@@ -56,5 +56,9 @@ public class MainWindow {
         dialogueContainer.getChildren().addAll(DialogueBox.getUserDialogue(input, userImage), DialogueBox.getEchoDialogue(response, echoImage));
 
         userInput.clear();
+
+        if (input.equalsIgnoreCase("bye")) {
+            javafx.application.Platform.exit();
+        }
     }
 }
