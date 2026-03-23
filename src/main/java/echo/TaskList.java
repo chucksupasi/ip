@@ -3,7 +3,7 @@ package echo;
 import java.time.LocalDate;
 
 /**
- * Stores all tasks and their details in arrays.
+ * Stores all tasks and their details in fixed-size arrays.
  */
 public class TaskList {
 

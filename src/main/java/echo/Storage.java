@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Handles loading and saving tasks to a file on disk.
+ * Handles loading, saving tasks, and retrieving motivational quotes.
  */
 public class Storage {
 
@@ -17,8 +17,8 @@ public class Storage {
     private static final String CHEER_PATH = "./data/cheer.txt"; // File cheer.txt is in folder named data
 
     /**
-     * Loads tasks from the file into the given task list.
-     * @param list the task list to load tasks into
+     * Loads tasks from the storage file into the given task list.
+     * @param list the task list to populate with saved tasks
      */
     public void load(TaskList list) {
         File file = new File(FILE_PATH);
@@ -97,7 +97,7 @@ public class Storage {
     }
 
     /**
-     * Saves tasks from the given task list into the file.
+     * Saves tasks from the task list into the storage file.
      * @param list the task list to save to disk
      */
     public void save(TaskList list) {
@@ -140,7 +140,8 @@ public class Storage {
     }
 
     /**
-     * Returns a random motivational quote from the cheer file, or an error message if unavailable.
+     * Returns a random motivational quote from the cheer file.
+     * @return a random cheer quote or an error message if unavailable
      */
     public String getRandomCheer() {
         List<String> quotes = new ArrayList<>();

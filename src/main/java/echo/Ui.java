@@ -3,7 +3,7 @@ package echo;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Handles all messages displayed to the user.
+ * Handles all user-facing messages and formatting of task output.
  */
 public class Ui {
 
@@ -11,23 +11,26 @@ public class Ui {
     public String listingMessage = "";
 
     /**
-     * Prints a welcome message to the user.
+     * Returns the welcome message shown to the user at startup.
+     * @return welcome message string
      */
     public static String showWelcome() {
         return "Hey there! I'm Echo, your personal assistant\n" + "What can I do for you?\n";
     }
 
     /**
-     * Prints a goodbye message to the user.
+     * Returns the goodbye message shown when exiting the program.
+     * @return goodbye message string
      */
     public static String showBye() {
         return "Bye. Hope to see you again soon!\n";
     }
 
     /**
-     * Prints a single task with its status and time information.
-     * @param i the index of the task in the task list
+     * Formats and returns a single task's display string with its status and date info.
+     * @param i index of the task in the task list
      * @param list the task list containing the task
+     * @return formatted task string
      */
     public String printTask(int i, TaskList list) {
         printingMessage = "";
@@ -58,8 +61,9 @@ public class Ui {
     }
 
     /**
-     * Prints all tasks in the task list.
+     * Formats and returns a list of all tasks in the task list.
      * @param list the task list to display
+     * @return formatted string of all tasks
      */
     public String showList(TaskList list) {
         listingMessage = "";

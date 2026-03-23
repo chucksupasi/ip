@@ -6,8 +6,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
+/**
+ * Controller for the main chat window, handling user input and message display.
+ */
 public class MainWindow {
 
     @FXML
@@ -28,19 +30,18 @@ public class MainWindow {
     private Image echoImage = new Image(this.getClass().getResourceAsStream("/images/DaEcho.png"));
 
     /**
-     * Initialize method called automatically after FXML loads.
+     * Initializes the chat window and displays the welcome message.
      */
     @FXML
     public void initialize() {
-        // Scroll to the bottom when dialogContainer height changes
         dialogueContainer.heightProperty().addListener((obs) -> scrollPane.setVvalue(1.0));
-        echoBot = new Echo(); // your existing Echo bot instance
+        echoBot = new Echo();
 
         dialogueContainer.getChildren().addAll(DialogueBox.getEchoDialogue(Ui.showWelcome(), echoImage));
     }
 
     /**
-     * Handles user input: displays user message and Echo's response.
+     * Processes user input and updates the dialogue with user and bot messages.
      */
     @FXML
     private void handleUserInput() {
@@ -50,9 +51,8 @@ public class MainWindow {
             return;
         }
 
-        String response = echoBot.getResponse(input); // You can create this method in Echo.java
+        String response = echoBot.getResponse(input);
 
-        // Add messages to VBox
         dialogueContainer.getChildren().addAll(DialogueBox.getUserDialogue(input, userImage), DialogueBox.getEchoDialogue(response, echoImage));
 
         userInput.clear();

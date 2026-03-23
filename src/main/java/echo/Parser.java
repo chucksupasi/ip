@@ -5,18 +5,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Parses user input and executes commands for the chatbot.
+ * Parses user input and executes commands on the task list.
  */
 public class Parser {
 
     public String printingMessage = "";
 
     /**
-     * Handles a user command and updates the task list accordingly.
+     * Processes a user command and returns the resulting output message.
      * @param input the command entered by the user
      * @param list the current task list
-     * @param ui the user interface for printing messages
+     * @param ui the interface for formatting output
      * @param storage the storage handler for saving tasks
+     * @return the message resulting from executing the command
      */
     public String handleCommand(String input, TaskList list, Ui ui, Storage storage) {
         // Clear printing message
@@ -217,7 +218,7 @@ public class Parser {
     }
 
     /**
-     * Converts a string input into a task index for the task list.
+     * Converts a string input into a zero-based task index or returns -1 if invalid.
      * @param input the string containing the task number
      * @param list the current task list
      * @return the zero-based index of the task, or -1 if invalid

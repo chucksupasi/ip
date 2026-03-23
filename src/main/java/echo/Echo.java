@@ -1,23 +1,18 @@
 package echo;
 
-import java.util.Scanner;
-
 /**
- * Main class for the Echo chatbot program.
+ * Main class that combines different Echo chatbot classes.
  */
 public class Echo {
-
-
-    /**
-     * Runs the Echo chatbot program and handles user input.
-     * @param args command line arguments
-     **/
 
     private TaskList taskList;
     private Storage storage;
     private Ui ui;
     private Parser parser;
 
+    /**
+     * Constructs a new Echo chatbot and loads saved tasks.
+     */
     public Echo() {
         taskList = new TaskList();
         storage = new Storage();
@@ -27,6 +22,11 @@ public class Echo {
         storage.load(taskList); // load saved tasks
     }
 
+    /**
+     * Processes user input and returns the chatbot's response.
+     * @param input user input string
+     * @return chatbot response
+     */
     public String getResponse(String input) {
         if (input.equals("bye")) {
             return "Bye!";
