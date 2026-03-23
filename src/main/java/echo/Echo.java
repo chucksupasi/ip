@@ -6,36 +6,33 @@ import java.util.Scanner;
  * Main class for the Echo chatbot program.
  */
 public class Echo {
+
+
     /**
      * Runs the Echo chatbot program and handles user input.
      * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+     **/
 
-        TaskList taskList = new TaskList();
-        Storage storage = new Storage();
-        Ui ui = new Ui();
-        Parser parser = new Parser();
+    private TaskList taskList;
+    private Storage storage;
+    private Ui ui;
+    private Parser parser;
 
-        // Load data from existing file at the start of programme
-        storage.load(taskList);
+    public Echo() {
+        taskList = new TaskList();
+        storage = new Storage();
+        ui = new Ui();
+        parser = new Parser();
 
-        // Introduction
-        ui.showWelcome();
+        storage.load(taskList); // load saved tasks
+    }
 
-        // Main loop where users can chat continuously
-        while (true) {
-            System.out.print("> ");
-            String input = sc.nextLine();
-
-            if (input.equals("bye")) {
-                ui.showBye();
-                break;
-            }
-
-            parser.handleCommand(input, taskList, ui, storage);
+    public String getResponse(String input) {
+        if (input.equals("bye")) {
+            return "Bye!";
         }
-        sc.close();
+
+        // Instead of printing, return output
+        return parser.handleCommand(input, taskList, ui, storage);
     }
 }
