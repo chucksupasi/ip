@@ -76,7 +76,7 @@ public class Ui {
         listingMessage = "";
         listingMessage = listingMessage + "Here are the tasks in your list:\n";
         for (int i = 0; i < list.taskCount; i++) {
-            listingMessage = listingMessage + (i + 1) + "." + printTask(i, list) + "\n";
+            listingMessage = listingMessage + (i + 1) + "." + printTask(i, list);
         }
         return listingMessage;
     }
