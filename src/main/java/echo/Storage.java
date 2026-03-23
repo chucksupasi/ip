@@ -34,7 +34,7 @@ public class Storage {
                     if (parts.length < 3) continue; // Skip corrupted lines but others are still read
 
                     int i = list.taskCount;
-                    assert i >= 0 && i < 100 : "Internal Error: index out of bounds while loading";
+                    assert i >= 0 && i < TaskList.MAX_TASKS : "Internal Error: index out of bounds while loading";
 
                     list.taskType[i] = TaskList.TaskType.valueOf(parts[0]);
                     list.done[i] = parts[1].equals("1");
@@ -104,7 +104,7 @@ public class Storage {
      */
     public void save(TaskList list) {
         assert list != null : "Internal Error: TaskList cannot be null";
-        assert list.taskCount >= 0 && list.taskCount <= 100 : "Internal Error: taskCount out of bounds while saving";
+        assert list.taskCount >= 0 && list.taskCount <= TaskList.MAX_TASKS : "Internal Error: taskCount out of bounds while saving";
 
         try {
             File dir = new File("./data");

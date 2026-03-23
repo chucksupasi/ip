@@ -9,6 +9,8 @@ import java.time.format.DateTimeParseException;
  */
 public class Parser {
 
+    private static final String STORAGE_DATE_FORMAT = "yyyy-MM-dd";
+
     public String printingMessage = "";
 
     /**
@@ -66,7 +68,7 @@ public class Parser {
             }
 
             int i = list.taskCount;
-            assert i >= 0 && i < 100 : "Internal Error: taskCount exceeds array size";
+            assert i >= 0 && i < TaskList.MAX_TASKS : "Internal Error: taskCount exceeds array size";
             list.tasks[i] = desc;
             list.taskType[i] = TaskList.TaskType.T;
             list.timeInfo[i] = "";
@@ -98,7 +100,7 @@ public class Parser {
 
             // Check if deadline date is recognisable, else store as plain text
             try {
-                list.taskDates[i] = LocalDate.parse(by, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                list.taskDates[i] = LocalDate.parse(by, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
             }
             catch (DateTimeParseException e) {
                 list.taskDates[i] = null;
@@ -139,7 +141,7 @@ public class Parser {
 
             // Check if event starting date is recognisable, else store as plain text
             try {
-                list.taskFromDates[i] = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                list.taskFromDates[i] = LocalDate.parse(from, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
             }
             catch (DateTimeParseException e) {
                 list.taskFromDates[i] = null;
@@ -148,7 +150,7 @@ public class Parser {
 
             // Check if event ending date is recognisable, else store as plain text
             try {
-                list.taskToDates[i] = LocalDate.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                list.taskToDates[i] = LocalDate.parse(to, DateTimeFormatter.ofPattern(STORAGE_DATE_FORMAT));
             }
             catch (DateTimeParseException e) {
                 list.taskToDates[i] = null;

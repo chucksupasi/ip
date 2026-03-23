@@ -26,7 +26,7 @@ public class Echo {
 
         storage.load(taskList); // load saved tasks
 
-        assert taskList.taskCount >= 0 && taskList.taskCount <= 100 : "Task count out of bounds after loading";
+        assert taskList.taskCount >= 0 && taskList.taskCount <= TaskList.MAX_TASKS : "Task count out of bounds after loading";
     }
 
     /**
