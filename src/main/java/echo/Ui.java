@@ -33,6 +33,9 @@ public class Ui {
      * @return formatted task string
      */
     public String printTask(int i, TaskList list) {
+        assert i >= 0 && i <= list.taskCount : "Internal Error: index out of bounds in printTask";
+        assert list.tasks[i] != null : "Internal Error: task description is null";
+
         printingMessage = "";
 
         String status = list.done[i] ? "[X]" : "[ ]";
@@ -66,6 +69,8 @@ public class Ui {
      * @return formatted string of all tasks
      */
     public String showList(TaskList list) {
+        assert list.taskCount >= 0 && list.taskCount <= 100 : "Internal Error: taskCount out of bounds in showList";
+
         listingMessage = "";
         listingMessage = listingMessage + "Here are the tasks in your list:\n";
         for (int i = 0; i < list.taskCount; i++) {

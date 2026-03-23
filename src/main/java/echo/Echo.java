@@ -19,7 +19,14 @@ public class Echo {
         ui = new Ui();
         parser = new Parser();
 
+        assert taskList != null : "TaskList should be initialized";
+        assert storage != null : "Storage should be initialized";
+        assert ui != null : "UI should be initialized";
+        assert parser != null : "Parser should be initialized";
+
         storage.load(taskList); // load saved tasks
+
+        assert taskList.taskCount >= 0 && taskList.taskCount <= 100 : "Task count out of bounds after loading";
     }
 
     /**

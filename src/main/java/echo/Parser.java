@@ -20,6 +20,11 @@ public class Parser {
      * @return the message resulting from executing the command
      */
     public String handleCommand(String input, TaskList list, Ui ui, Storage storage) {
+
+        assert list != null : "Internal Error: TaskList is null";
+        assert ui != null : "Internal Error: Ui is null";
+        assert storage != null : "Internal Error: Storage is null";
+
         // Clear printing message
         printingMessage = "";
 
@@ -61,6 +66,7 @@ public class Parser {
             }
 
             int i = list.taskCount;
+            assert i >= 0 && i < 100 : "Internal Error: taskCount exceeds array size";
             list.tasks[i] = desc;
             list.taskType[i] = TaskList.TaskType.T;
             list.timeInfo[i] = "";
@@ -238,6 +244,7 @@ public class Parser {
             return -1;
         }
 
+        assert num >= 0 && num < list.taskCount : "Internal Error: parseIndex returned invalid index";
         return num;
     }
 }

@@ -21,6 +21,7 @@ public class Storage {
      * @param list the task list to populate with saved tasks
      */
     public void load(TaskList list) {
+        assert list != null : "Internal Error: TaskList cannot be null";
         File file = new File(FILE_PATH);
 
         // Check if the file is there. If not, the data starts empty.
@@ -33,6 +34,7 @@ public class Storage {
                     if (parts.length < 3) continue; // Skip corrupted lines but others are still read
 
                     int i = list.taskCount;
+                    assert i >= 0 && i < 100 : "Internal Error: index out of bounds while loading";
 
                     list.taskType[i] = TaskList.TaskType.valueOf(parts[0]);
                     list.done[i] = parts[1].equals("1");
@@ -101,6 +103,9 @@ public class Storage {
      * @param list the task list to save to disk
      */
     public void save(TaskList list) {
+        assert list != null : "Internal Error: TaskList cannot be null";
+        assert list.taskCount >= 0 && list.taskCount <= 100 : "Internal Error: taskCount out of bounds while saving";
+
         try {
             File dir = new File("./data");
 
@@ -164,6 +169,7 @@ public class Storage {
             return "Error reading cheer file.";
         }
 
+        assert quotes != null : "Internal Error: quotes list should never be null";
         if (quotes.isEmpty()) {
             return "No quotes available.";
         }
