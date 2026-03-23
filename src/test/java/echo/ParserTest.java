@@ -70,4 +70,43 @@ public class ParserTest {
 
         assertEquals(0, list.taskCount);
     }
+
+    @Test
+    void unmark_marksTaskAsNotDone() {
+        list.tasks[0] = "task";
+        list.taskType[0] = TaskList.TaskType.T;
+        list.done[0] = true;
+        list.taskCount = 1;
+
+        parser.handleCommand("unmark 1", list, ui, storage);
+
+        assertFalse(list.done[0]);
+    }
+
+    @Test
+    void unmark_invalidIndex_returnsError() {
+        list.taskCount = 0;
+        String response = parser.handleCommand("unmark 1", list, ui, storage);
+
+        assertTrue(response.contains("Error"));
+    }
+
+    @Test
+    void event_validEvent_setsDates() {
+        parser.handleCommand("event party /from 2025-05-01 /to 2025-05-02", list, ui, storage);
+
+        assertEquals(1, list.taskCount);
+        assertEquals(TaskList.TaskType.E, list.taskType[0]);
+        assertNotNull(list.taskFromDates[0]);
+        assertNotNull(list.taskToDates[0]);
+    }
+
+    @Test
+    void deadline_invalidFormat_storesPlainText() {
+        parser.handleCommand("deadline report /by not-a-date", list, ui, storage);
+
+        assertEquals(1, list.taskCount);
+        assertEquals("by: not-a-date", list.timeInfo[0]);
+        assertNull(list.taskDates[0]);
+    }
 }
